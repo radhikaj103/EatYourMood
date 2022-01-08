@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Favorites
+{% endblock %}
+
+{% block main %}
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Business Name</th>
+                <th scope="col">Location</th>
+                <th scope="col">Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fav in favList %}
+                <tr>
+                    <td>
+                        <a href={{ fav["url"] }} target="_blank">{{ fav["favoriteBusiness"] }}</a>
+                    </td>
+                    <td>{{ fav["location"] }}</td>
+                    <td>{{ fav["phone"] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+</table>
+{% endblock %}

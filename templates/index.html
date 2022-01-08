@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    <h1>Eat Your Mood!</h1>
+
+
+    <hr>
+    <div id="location"></div>
+    <p>How do you feel today? Select a mood from the dropdown menu below.</p>
+    <form action="/" method="POST">
+        <input type="hidden" id="lat" name="lat">
+        <input type="hidden" id="long" name="long">
+        
+        <select name="moodSelect" id="moodSelect" onchange="this.form.submit()">
+            {% for mood in moodList %}
+                <option value={{ mood }} {% if selectedMood and selectedMood == mood %} selected {% endif %}>
+                    {{ mood }}
+                </option>
+            {% endfor %}
+        </select>
+
+        
+    </form>
+
+    
+     
+
+    {% if yelpDataList %}
+    <div class="float-left">
+        <h3>We suggest you try the following:</h3>
+        <ul class="float-left">{% for cuisine in cuisineList %}<li>{{ cuisine.upper() }}</li>{% endfor %}</ul>
+    </div>
+
+    <br/>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Business Name</th>
+                <th scope="col">Location</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Distance</th>
+                <th scope="col">Price</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for business in yelpDataList %}
+                <tr>
+                    <td>
+                        <a href={{ business["url"] }} target="_blank">{{ business["name"] }}</a>
+                    </td>
+                    <td>{{ business["location"] }}</td>
+                    <td>{{ business["phone"] }}</td>
+                    <td>{{ business["distance"] }}</td>
+                    <td>{{ business["price"] }}</td>
+                    <td>
+                        {% if isLoggedIn == True %}
+
+                                <form method="POST" action="/">
+                                    <input type="hidden" id="businessName" name="businessName" value="{{ business["name"] }}">
+                                    <input type="hidden" id="moodInput" name="moodInput" value="{{ selectedMood }}">
+                                    <input type="hidden" id="location" name="location" value="{{ business["location"] }}">
+                                    <input type="hidden" id="phone" name="phone" value="{{ business["phone"] }}">
+                                    <input type="hidden" id="url" name="url" value="{{ business["url"] }}">
+                                    {% if business["fav"] == False %}
+                                        <input type="hidden" id="dbAction" name="dbAction" value="add">
+                                        <input type="submit" value="Add to favorites"></input>
+                                    {% else %}
+                                        <input type="hidden" id="dbAction" name="dbAction" value="remove">
+                                        <input type="submit" value="Remove from favorites"></input>
+                                    {% endif %}
+                                </form>
+
+                        {% else %}
+                        <button onclick="myFunction()" type="button">Add to favorites</button>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    <script>
+    function myFunction() {
+      alert("Please login to add to favorites!");
+    }
+    </script>
+
+    <script type="text/javascript" src="/static/scripts/geolocation.js"></script>
+{% endblock %}

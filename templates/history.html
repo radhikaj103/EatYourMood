@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Business Name</th>
+                <th scope="col">Date</th>
+                <th scope="col">Expense</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in expenseList %}
+                <tr>
+                    <td>{{ expense["businessName"] }}</td>
+                    <td>{{ expense["purchase_date"] }}</td>
+                    <td>{{ "$%.2f"|format(expense["expense"] | float) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+</table>
+{% endblock %}
